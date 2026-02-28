@@ -502,26 +502,29 @@ footer {
 
 @media (max-width: 768px) {
 
-  /* ---------------- HEADER ---------------- */
-
   .main-header {
-    grid-template-columns: auto;
-    grid-template-rows: auto auto auto;
-    height: auto;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    text-align: center;
+    height: auto;
   }
 
   .header-left,
   .header-right {
+    display: flex;
     justify-content: center;
+    gap: 15px;
+    width: 100%;
   }
 
-  .main-header h1 {
-    margin: 5px 0;
+  .header-left {
+    order: -1;
   }
 
+  .header-right {
+    order: -1;
+  }
 
   /* ---------------- TABLERO ---------------- */
 

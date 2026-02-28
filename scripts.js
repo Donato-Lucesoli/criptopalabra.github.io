@@ -10,6 +10,14 @@ const botonTema = document.querySelector(".btn-tema");
 const botonReiniciar = document.querySelector(".btn-reiniciar");
 const iconMoon = document.querySelector(".bi-moon");
 const iconSun = document.querySelector(".bi-sun");
+const esMobile = window.matchMedia("(max-width: 768px)").matches;
+const mapaTildes = {
+    a: "á",
+    e: "é",
+    i: "í",
+    o: "ó",
+    u: "ú"
+};
 
 let palabraSecreta = "";
 let borrando = false;
@@ -444,3 +452,37 @@ document.addEventListener("DOMContentLoaded", function () {
           botonInfo.addEventListener("click", mostrarOnboarding);
      }
 });
+
+
+/* Longpress para móviles */
+function agregarSoporteTildes() {
+
+    if (!esMobile) return;
+
+    botonesTeclado.forEach(boton => {
+
+        const letra = boton.textContent.toLowerCase();
+
+        if (!mapaTildes[letra]) return;
+
+        let timer = null;
+
+        boton.addEventListener("touchstart", () => {
+
+            timer = setTimeout(() => {
+
+                const vocalTilde = mapaTildes[letra];
+                insertarLetra(vocalTilde);
+
+            }, 500); // 500ms presionado
+
+        });
+
+        boton.addEventListener("touchend", () => {
+            clearTimeout(timer);
+        });
+
+    });
+}
+
+agregarSoporteTildes();
