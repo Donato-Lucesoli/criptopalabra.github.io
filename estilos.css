@@ -316,6 +316,7 @@ footer {
   width: 100%;
   max-width: 600px;
   margin: auto;
+  padding: 0 10px;
 }
 
 .fila-oculta{
@@ -335,7 +336,8 @@ footer {
 }
 
 .caja-letra {
-  flex: 1;                /* Se reparten el espacio */
+  flex:  1 1 0;             /* Se reparten el espacio */
+  min-width: 0;
   max-width: clamp(30px, 60px, 60px);        /* Nunca serán gigantes */
   aspect-ratio: 1 / 1;    /* Siempre cuadradas */
   margin: 2px;
@@ -381,6 +383,8 @@ footer {
 }
 
 .boton-teclado {
+  flex: 1 1 auto;
+  min-width: 32px;
   font-size: clamp(1rem, 2.5vw, 1.1rem);
   font-weight: 700;
   padding: clamp(0.3rem, 1vw, 0.6rem);
