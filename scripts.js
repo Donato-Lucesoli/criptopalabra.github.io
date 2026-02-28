@@ -486,3 +486,65 @@ function agregarSoporteTildes() {
 }
 
 agregarSoporteTildes();
+
+/* Eliminación de botones con tíldes en pantallas pequeñas */
+/* =====================================================
+   📱 ADAPTACIÓN MOBILE DINÁMICA
+===================================================== */
+
+function esPantallaPequena() {
+    return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function eliminarBotonesConTilde() {
+    const botones = document.querySelectorAll(".boton-teclado");
+
+    const vocalesConTilde = ["á", "é", "í", "ó", "ú"];
+
+    botones.forEach(boton => {
+        const texto = boton.textContent.trim().toLowerCase();
+        if (vocalesConTilde.includes(texto)) {
+            boton.remove();
+        }
+    });
+}
+
+function unirBotonesHeader() {
+    const header = document.querySelector(".main-header");
+    const left = document.querySelector(".header-left");
+    const right = document.querySelector(".header-right");
+
+    if (!header || !left || !right) return;
+
+    // Crear contenedor único si no existe
+    let contenedorBotones = document.querySelector(".header-mobile-buttons");
+
+    if (!contenedorBotones) {
+        contenedorBotones = document.createElement("div");
+        contenedorBotones.classList.add("header-mobile-buttons");
+
+        // Mover todos los botones dentro
+        contenedorBotones.append(...left.children);
+        contenedorBotones.append(...right.children);
+
+        header.insertBefore(contenedorBotones, header.firstChild);
+
+        // Eliminar contenedores vacíos
+        left.remove();
+        right.remove();
+    }
+}
+
+function aplicarAdaptacionMobile() {
+
+    if (!esPantallaPequena()) return;
+
+    eliminarBotonesConTilde();
+    unirBotonesHeader();
+}
+
+/* Ejecutar al cargar */
+document.addEventListener("DOMContentLoaded", aplicarAdaptacionMobile);
+
+/* Ejecutar si cambia tamaño */
+window.addEventListener("resize", aplicarAdaptacionMobile);
