@@ -494,3 +494,80 @@ footer {
   opacity: 1;
   color: var(--color-primary);
 }
+
+/* =====================================================
+   📱 FIX RESPONSIVE SOLO MOBILE
+   (NO MODIFICA DESKTOP)
+===================================================== */
+
+@media (max-width: 768px) {
+
+  /* ---------------- HEADER ---------------- */
+
+  .main-header {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    padding: 15px;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .header-left,
+  .header-right {
+    justify-content: center;
+  }
+
+  .main-header h1 {
+    margin: 5px 0;
+  }
+
+
+  /* ---------------- TABLERO ---------------- */
+
+  #tablero-juego {
+    padding: 0 10px;
+  }
+
+  .fila-letras,
+  .fila-oculta {
+    flex-wrap: nowrap;
+  }
+
+  .caja-letra {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 1px;
+    font-size: clamp(1.2rem, 6vw, 2rem);
+  }
+
+
+  /* ---------------- TECLADO ---------------- */
+
+  #contenido-teclado {
+    padding: 0 10px;
+  }
+
+  .boton-teclado {
+    flex: 1 1 auto;
+    min-width: 30px;
+  }
+
+}
+
+
+/* =====================================================
+   📱 EXTRA SMALL DEVICES (iPhone SE / < 400px)
+===================================================== */
+
+@media (max-width: 400px) {
+
+  .caja-letra {
+    font-size: clamp(1rem, 7vw, 1.5rem);
+  }
+
+  .main-header h1 {
+    font-size: 1.3rem;
+  }
+
+}
