@@ -411,6 +411,7 @@ function mostrarOnboarding() {
                     <p>
                          En cada intento debes escribir una palabra buscando repetir letras que ya hayas usado en anteriores intentos. Si la <strong>letra repetida</strong> existe en la palabra secreta, se revelará su posición. Si no, se marcará como incorrecta.
                     </p>
+                    ${esMobile ? '<p>Mantén sobre la vocal para escribirla con tílde</p>' : ''}
 
                     <h3 class="onboarding-subtitle">Estrategia</h3>
                     <p style="margin-top:10px;">
