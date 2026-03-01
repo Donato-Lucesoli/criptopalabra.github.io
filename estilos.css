@@ -601,24 +601,3 @@ footer {
   }
 
 }
-
-/* =====================================================
-   📱 TECLADO MOBILE CORRECTO (SIN WRAP)
-===================================================== */
-
-@media (max-width: 768px) {
-
-  #contenido-teclado .primera-fila,
-  #contenido-teclado .segunda-fila,
-  #contenido-teclado .tercera-fila {
-    flex-wrap: nowrap;
-  }
-
-  .boton-teclado {
-    flex: 1 1 0;
-    min-width: 0;
-    padding: clamp(0.25rem, 1vw, 0.5rem);
-    font-size: clamp(0.85rem, 3.5vw, 1rem);
-  }
-
-}
