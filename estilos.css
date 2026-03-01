@@ -622,13 +622,3 @@ footer {
   }
 
 }
-
-@media (max-width: 768px) {
-
-  .caja-letra {
-    max-width: none;   /* 🔥 permite que se reduzcan */
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-}
