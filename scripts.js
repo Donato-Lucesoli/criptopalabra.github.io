@@ -54,12 +54,6 @@ function normalizarLetra(letra) {
           .replace(/[\u0300-\u036f]/g, ""); // elimina tildes
 }
 
-function seleccionarNuevaPalabra() {
-     palabraSecreta = palabras[
-          Math.floor(Math.random() * palabras.length)
-     ].toLowerCase();
-}
-
 /* ===============================
     LÓGICA DEL JUEGO
 =================================*/
