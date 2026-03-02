@@ -495,13 +495,14 @@ footer {
   color: var(--color-primary);
 }
 
+
 /* =====================================================
-   📱 FIX RESPONSIVE SOLO MOBILE
-   (NO MODIFICA DESKTOP)
+   📱 HEADER & LAYOUT MOBILE LIMPIO
 ===================================================== */
 
 @media (max-width: 768px) {
 
+  /* Header pasa de grid a flex vertical */
   .main-header {
     display: flex;
     flex-direction: column;
@@ -511,22 +512,16 @@ footer {
   }
 
   .main-header h1 {
-    margin-bottom: 5px;
+    margin: 5px 0;
   }
 
+  /* Botones centrados arriba del título */
   .header-left,
   .header-right {
     display: flex;
     justify-content: center;
     gap: 15px;
     width: 100%;
-  }
-
-  .header-left {
-    order: -1;
-  }
-
-  .header-right {
     order: -1;
   }
 
@@ -544,7 +539,6 @@ footer {
     font-size: clamp(1.2rem, 6vw, 2rem);
   }
 
-
   /* ---------------- TECLADO ---------------- */
 
   .boton-teclado {
@@ -553,30 +547,6 @@ footer {
   }
 
 }
-
-/* =====================================================
-   📱 HEADER MOBILE BOTONES HORIZONTALES
-===================================================== */
-
-@media (max-width: 768px) {
-
-  .header-mobile-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    width: 100%;
-  }
-
-  .main-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    height: auto;
-  }
-
-}
-
 
 /* =====================================================
    📱 EXTRA SMALL DEVICES (iPhone SE / < 400px)
