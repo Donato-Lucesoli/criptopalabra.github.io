@@ -11,13 +11,6 @@ const botonReiniciar = document.querySelector(".btn-reiniciar");
 const iconMoon = document.querySelector(".bi-moon");
 const iconSun = document.querySelector(".bi-sun");
 const esMobile = window.matchMedia("(max-width: 768px)").matches;
-const mapaTildes = {
-    a: "á",
-    e: "é",
-    i: "í",
-    o: "ó",
-    u: "ú"
-};
 
 let palabraSecreta = "";
 let borrando = false;
@@ -55,6 +48,17 @@ botonTema.addEventListener("click", () => {
      aplicarTema(esOscuro ? "claro" : "oscuro");
 });
 
+function normalizarLetra(letra) {
+     return letra
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, ""); // elimina tildes
+}
+
+function seleccionarNuevaPalabra() {
+     palabraSecreta = palabras[
+          Math.floor(Math.random() * palabras.length)
+     ].toLowerCase();
+}
 
 /* ===============================
     LÓGICA DEL JUEGO
@@ -169,26 +173,63 @@ function finalizarIntento() {
      if (juegoTerminado) return;
      if (palabraActual.length === 0) return;
 
+     const palabraIngresada = palabraActual.join("").toLowerCase();
+
+     const palabraNormalizada = normalizarLetra(palabraSecreta);
+     const ingresadaNormalizada = normalizarLetra(palabraIngresada);
+
+     /* ===============================
+        🏆 VICTORIA INSTANTÁNEA
+     =============================== */
+
+     if (ingresadaNormalizada === palabraNormalizada) {
+
+          // Revelar toda la palabra respetando tildes
+          const filaOculta = document.querySelector(".fila-oculta");
+
+          palabraSecreta.split("").forEach((letraOriginal, i) => {
+               filaOculta.children[i].textContent = letraOriginal;
+          });
+
+          juegoTerminado = true;
+
+          setTimeout(() => {
+               mostrarVictoria();
+          }, 300);
+
+          return;
+     }
+
+     /* ===============================
+        🔍 LÓGICA NORMAL DEL JUEGO
+     =============================== */
+
      const historialPrevio = { ...letrasHistoricas };
      const letrasUnicas = [...new Set(palabraActual)];
 
      palabraActual.forEach((letra, index) => {
-          const caja = filaActual.children[index];
 
-          if (historialPrevio[letra]) {
-                if (palabraSecreta.includes(letra)) {
-                     caja.classList.add("correcta");
-                     revelarLetra(letra);
-                     marcarTecla(letra, "correcta");
-                } else {
-                     caja.classList.add("incorrecta");
-                     marcarTecla(letra, "incorrecta");
-                }
+          const caja = filaActual.children[index];
+          const letraNormalizada = normalizarLetra(letra);
+
+          if (historialPrevio[letraNormalizada]) {
+
+               if (palabraNormalizada.includes(letraNormalizada)) {
+
+                    caja.classList.add("correcta");
+                    revelarLetra(letraNormalizada);
+                    marcarTecla(letraNormalizada, "correcta");
+
+               } else {
+
+                    caja.classList.add("incorrecta");
+                    marcarTecla(letraNormalizada, "incorrecta");
+               }
           }
      });
 
      letrasUnicas.forEach(letra => {
-          letrasHistoricas[letra] = true;
+          letrasHistoricas[normalizarLetra(letra)] = true;
      });
 
      verificarVictoria();
@@ -201,7 +242,7 @@ function finalizarIntento() {
           juegoTerminado = true;
 
           setTimeout(() => {
-                mostrarDerrota();
+               mostrarDerrota();
           }, 300);
 
           return;
@@ -230,34 +271,41 @@ function verificarVictoria() {
     REVELAR Y MARCAR LETRAS
 =================================*/
 
-function revelarLetra(letra) {
+function revelarLetra(letraNormalizada) {
+
      const filaOculta = document.querySelector(".fila-oculta");
 
-     palabraSecreta.split("").forEach((l, i) => {
-          if (l === letra) {
-                const caja = filaOculta.children[i];
-                caja.textContent = letra;
+     palabraSecreta.split("").forEach((letraOriginal, i) => {
 
-                caja.classList.remove("animate__animated", "animate__fadeIn");
-                void caja.offsetWidth;
+          if (normalizarLetra(letraOriginal) === letraNormalizada) {
 
-                caja.classList.add("animate__animated", "animate__fadeIn");
-                caja.style.animationDuration = "1s";
+               const caja = filaOculta.children[i];
+               caja.textContent = letraOriginal; // 🔥 muestra con tilde si la tiene
+
+               caja.classList.remove("animate__animated", "animate__fadeIn");
+               void caja.offsetWidth;
+
+               caja.classList.add("animate__animated", "animate__fadeIn");
+               caja.style.animationDuration = "1s";
           }
      });
 }
 
-function marcarTecla(letra, estado) {
+function marcarTecla(letraNormalizada, estado) {
+
      botonesTeclado.forEach(boton => {
-          if (boton.textContent.toLowerCase() === letra) {
-                if (!boton.classList.contains("correcta")) {
-                     boton.classList.remove("incorrecta");
-                     boton.classList.add(estado);
-                }
+
+          const texto = boton.textContent.toLowerCase();
+
+          if (normalizarLetra(texto) === letraNormalizada) {
+
+               if (!boton.classList.contains("correcta")) {
+                    boton.classList.remove("incorrecta");
+                    boton.classList.add(estado);
+               }
           }
      });
 }
-
 
 /* ===============================
     ANIMACIONES
@@ -411,7 +459,6 @@ function mostrarOnboarding() {
                     <p>
                          En cada intento debes escribir una palabra buscando repetir letras que ya hayas usado en anteriores intentos. Si la <strong>letra repetida</strong> existe en la palabra secreta, se revelará su posición. Si no, se marcará como incorrecta.
                     </p>
-                    ${esMobile ? '<p>Mantén sobre la vocal para escribirla con tílde</p>' : ''}
 
                     <h3 class="onboarding-subtitle">Estrategia</h3>
                     <p style="margin-top:10px;">
@@ -453,40 +500,6 @@ document.addEventListener("DOMContentLoaded", function () {
           botonInfo.addEventListener("click", mostrarOnboarding);
      }
 });
-
-
-/* Longpress para móviles */
-function agregarSoporteTildes() {
-
-    if (!esMobile) return;
-
-    botonesTeclado.forEach(boton => {
-
-        const letra = boton.textContent.toLowerCase();
-
-        if (!mapaTildes[letra]) return;
-
-        let timer = null;
-
-        boton.addEventListener("touchstart", () => {
-
-            timer = setTimeout(() => {
-
-                const vocalTilde = mapaTildes[letra];
-                insertarLetra(vocalTilde);
-
-            }, 500); // 500ms presionado
-
-        });
-
-        boton.addEventListener("touchend", () => {
-            clearTimeout(timer);
-        });
-
-    });
-}
-
-agregarSoporteTildes();
 
 /* Eliminación de botones con tíldes en pantallas pequeñas */
 /* =====================================================
